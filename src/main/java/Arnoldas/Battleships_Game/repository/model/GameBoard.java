@@ -1,7 +1,11 @@
 package Arnoldas.Battleships_Game.repository.model;
 
 
+import java.util.Arrays;
+
 public class GameBoard {
+
+
     public char[][] getField() {
         return field;
     }
@@ -21,4 +25,5 @@ public class GameBoard {
             {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
             {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.'}
     };
+
 }
