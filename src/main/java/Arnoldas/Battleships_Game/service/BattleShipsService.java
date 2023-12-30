@@ -13,6 +13,7 @@ public class BattleShipsService {
 
     Random random = new Random();
     boolean spaceFree = false;
+    int count = 0;
     @Autowired
     GameBoard gameBoard;
 
@@ -323,32 +324,61 @@ public class BattleShipsService {
         return field;
     }
 
-    public void makeAMove(char[][] field, JsonNode jsonResponse) {
+    public int makeAMove(char[][] field, JsonNode jsonResponse) {
 
         int row = extractRow(jsonResponse);
         int column = extractColumn(jsonResponse);
+        int shipsRemaining = gameProgress(field);
+
 
         if (field != null && field[row][column] == '0') {
             field[row][column] = '1';
             gameBoard.setField(field);
+            count++;
         } else if (field != null && field[row][column] == '.') {
             field[row][column] = 'x';
             gameBoard.setField(field);
+            count++;
         }
 
+        if(count <= 25 && shipsRemaining == 0){
+            return 1;
+        } else if(count > 25){
+            return -1;
+        } else {
+            return 0;
+        }
+//        System.out.println("comparing");
+//        System.out.println(row);
+//        System.out.println(column);
+//        // Printing the modified field directly from the service
+//        for (int p = 0; p < field.length; p++) {
+//            for (int l = 0; l < field[p].length; l++) {
+//                System.out.print(field[p][l] + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println("----------------");
 
-        System.out.println("comparing");
-        System.out.println(row);
-        System.out.println(column);
-        // Printing the modified field directly from the service
-        for (int p = 0; p < field.length; p++) {
-            for (int l = 0; l < field[p].length; l++) {
-                System.out.print(field[p][l] + " ");
+    }
+
+    public void programMoves(){}
+
+    public int gameProgress(char[][] field){
+        int shipsRemaining = 0;
+
+        int row = 0;
+        int column = 0;
+
+            for (int i = 0; i < field.length; i++) {
+                for (int j = 0; j < field.length; j++) {
+                    if (field[i][j] == '0') {
+                        shipsRemaining++;
+                    }
+                }
             }
-            System.out.println();
-        }
-        System.out.println("----------------");
 
+        return shipsRemaining;
     }
 
     public int extractRow(JsonNode jsonResponse){
