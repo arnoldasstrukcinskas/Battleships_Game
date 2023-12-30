@@ -1,7 +1,11 @@
 package Arnoldas.Battleships_Game.service;
 
+import Arnoldas.Battleships_Game.repository.model.GameBoard;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Random;
 
 @Service
@@ -9,6 +13,8 @@ public class BattleShipsService {
 
     Random random = new Random();
     boolean spaceFree = false;
+    @Autowired
+    GameBoard gameBoard;
 
     public char[][] paintShips(char[][] field) {
 
@@ -315,6 +321,50 @@ public class BattleShipsService {
         }
         System.out.println("----------------");
         return field;
+    }
+
+    public void makeAMove(char[][] field, JsonNode jsonResponse) {
+
+        int row = extractRow(jsonResponse);
+        int column = extractColumn(jsonResponse);
+
+        if (field != null && field[row][column] == '0') {
+            field[row][column] = '1';
+            gameBoard.setField(field);
+        } else if (field != null && field[row][column] == '.') {
+            field[row][column] = 'x';
+            gameBoard.setField(field);
+        }
+
+
+        System.out.println("comparing");
+        System.out.println(row);
+        System.out.println(column);
+        // Printing the modified field directly from the service
+        for (int p = 0; p < field.length; p++) {
+            for (int l = 0; l < field[p].length; l++) {
+                System.out.print(field[p][l] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("----------------");
+
+    }
+
+    public int extractRow(JsonNode jsonResponse){
+    JsonNode rowConvert = jsonResponse.at("/row");
+
+    int row = rowConvert.asInt();
+
+        System.out.println("row" + row);
+        return row;
+    }
+    public int extractColumn(JsonNode jsonResponse){
+        JsonNode columnConvert = jsonResponse.at("/column");
+        int column = columnConvert.asInt();
+        System.out.println("column" + column);
+
+        return column;
     }
 
 
