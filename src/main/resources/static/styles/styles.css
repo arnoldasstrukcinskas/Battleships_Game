@@ -1,0 +1,22 @@
+body{
+height: 100%;
+width: 100%;
+}
+
+#board{
+height: 50vh;
+width: 50vw;
+}
+
+#board-table tr {
+  height: 8vh;
+}
+
+#board-table td {
+  width: 8vw;
+  cursor: pointer;
+  border: 1px solid black;
+  text-align: center;
+  background-image: url('https://i.imgur.com/vmCd9wu.png');
+  background-size: cover;
+}
