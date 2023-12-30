@@ -10,7 +10,7 @@ public class BattleShipsService {
     Random random = new Random();
     boolean spaceFree = false;
 
-    public void paintShips(char[][] field) {
+    public char[][] paintShips(char[][] field) {
 
         boolean isHorizontal = random.nextBoolean();
 
@@ -314,5 +314,8 @@ public class BattleShipsService {
             System.out.println();
         }
         System.out.println("----------------");
+        return field;
     }
+
+
 }
