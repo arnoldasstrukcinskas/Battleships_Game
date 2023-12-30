@@ -3,7 +3,6 @@ package Arnoldas.Battleships_Game.controller;
 import Arnoldas.Battleships_Game.repository.model.GameBoard;
 import Arnoldas.Battleships_Game.service.BattleShipsService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,7 @@ public class BattleShipsController {
 
 @Autowired
 BattleShipsService battleShipsService;
-    GameBoard gameBoard;
+GameBoard gameBoard;
 
     //    http://localhost:8080/battleShips/home
 @RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -24,15 +23,36 @@ BattleShipsService battleShipsService;
     return "home";
 }
 
+
     @RequestMapping(value = "/getMoveCords", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public void getMoveCoordinates(@RequestBody ObjectNode cordsResponse) {
+    public String getMoveCoordinates(@RequestBody ObjectNode cordsResponse) {
 
     char[][] generatedBoard = gameBoard.getField();
         System.out.println(cordsResponse);
 
-        battleShipsService.makeAMove(generatedBoard, cordsResponse);
+        int outcome = battleShipsService.makeAMove(generatedBoard, cordsResponse);
+
+        if(outcome == 1){
+            System.out.println("--------won------------");
+            return "win";
+        } else if(outcome == -1) {
+            System.out.println("---------lost-----------");
+            return "lost";
+        } else {
+            return "";
+        }
         //cia ikelti modifikatiota metoda, ir is cia imesti i html
+    }
+
+    @RequestMapping(value = "/win", method = RequestMethod.GET)
+    public String won(){
+    return "win";
+    }
+
+    @RequestMapping(value = "/lost", method = RequestMethod.GET)
+    public String lost(){
+        return "lost";
     }
 
 }
