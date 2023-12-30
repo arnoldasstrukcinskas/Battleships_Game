@@ -1,16 +1,13 @@
 package Arnoldas.Battleships_Game.repository.model;
 
 
-import java.util.Arrays;
+import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+@Component
 public class GameBoard {
 
-
-    public char[][] getField() {
-        return field;
-    }
-
-    public void setField(char[][] field) {
+    public GameBoard() {
         this.field = field;
     }
 
@@ -25,5 +22,13 @@ public class GameBoard {
             {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
             {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.'}
     };
+
+    public char[][] getField() {
+        return field;
+    }
+
+    public void setField(char[][] field) {
+        this.field = field;
+    }
 
 }
