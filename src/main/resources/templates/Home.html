@@ -3,47 +3,67 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}">
 </head>
 <body>
-
-<p>Welcome to battleships game</p>
-<p id="board-table"></p>
+<p>BattleShips game</p>
+<div id="board">
+    <table id="board-table"></table>
+</div>
 
 <script>
-    let gameBoard;
-        function printBoard() {
 
-                $.ajax({
-                    url: "/battleShips/generateField",
-                    type: "POST",
-                    success: function(response) {
-                        gameBoard = response;
-                        console.log("Test: " + gameBoard);
-                        generateTable(gameBoard);
-                    },
-                    error: function(error) {
-                        console.error("Error: No Board", gameBoard);
-                    }
-                });
-            }
-    printBoard();
+    $(document).ready(function() {
+    generateTable();
+    });
 
-    function generateTable(gameBoard) {
+    function generateTable() {
     let table = '<table>';
 
     for (let i = 0; i < 10; i++) {
         table += '<tr>';
 
         for (let j = 0; j < 10; j++) {
-            table += `<td>${gameBoard[i][j]}</td>`;
+            table += `<td></td>`;
         }
         table += '</tr>';
     }
     table += '</table>';
     const tableContainer = document.getElementById('board-table');
     tableContainer.innerHTML = table;
+    }
+</script>>
+<script>
+    let rowIndex;
+    let columnIndex;
+
+$(document).ready(function() {
+    $('#board-table').on('click', 'td', function() {
+        const rowIndex = $(this).parent().index(); // Get the row index
+        const columnIndex = $(this).index(); // Get the column index
+
+        sendMove(rowIndex, columnIndex);
+
+        alert(`(${rowIndex}, ${columnIndex})`);
+
+    });
+});
+
+    function sendMove(clickedRow, clickedColumn)
+    {
+    $.ajax({
+        url: "/battleShips/getMoveCords",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            row: clickedRow,
+            column: clickedColumn
+        }),
+        dataType: "json",
+    });
     }
 </script>
 </body>
