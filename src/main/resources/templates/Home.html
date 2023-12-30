@@ -35,21 +35,25 @@
     const tableContainer = document.getElementById('board-table');
     tableContainer.innerHTML = table;
     }
-</script>>
+</script>
 <script>
     let rowIndex;
     let columnIndex;
 
 $(document).ready(function() {
+
     $('#board-table').on('click', 'td', function() {
-        const rowIndex = $(this).parent().index(); // Get the row index
-        const columnIndex = $(this).index(); // Get the column index
+
+        //ideti ifa, jeigu klickina ta pati, kad ismestu alerta.
+
+        rowIndex = $(this).parent().index(); // Get the row index
+        columnIndex = $(this).index(); // Get the column index
 
         sendMove(rowIndex, columnIndex);
 
-        alert(`(${rowIndex}, ${columnIndex})`);
-
     });
+<!--        alert(`(${rowIndex}, ${columnIndex})`);-->
+
 });
 
     function sendMove(clickedRow, clickedColumn)
