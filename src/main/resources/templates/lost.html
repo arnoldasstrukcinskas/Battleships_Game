@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost ;(</title>
+    <link rel="stylesheet" th:href="@{/styles/lost-screen.css}">
 </head>
 <body>
-<p>you have lost</p>
+<h1>You have lost</h1>
+<button id="button" onclick="openHome()">Restart Game</button>
+
+<script>
+    function openHome(){
+    window.open('http://localhost:8080/battleShips/home', '_self');
+    }
+</script>
 </body>
 </html>
