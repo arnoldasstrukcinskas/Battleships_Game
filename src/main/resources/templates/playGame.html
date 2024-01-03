@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GameBoard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/styles/playGame-styles.css}">
+</head>
+<body>
+<h1>Game Board</h1>
+<div id="board">
+    <div id="game">
+        <table id="board-table"></table>
+    </div>
+    <div id="info">
+        <p id="moves">Atlikote ėjimų: </p>
+        <p id="ships">Liko laivų: </p>
+        <button id="button" onclick="openHome()">Restart Game</button>
+    </div>
+</div>
+<script>
+$(document).ready(function () {
+    generateTable();
+});
+
+function generateTable() {
+    let table = '<table>';
+
+    for (let i = 0; i < 10; i++) {
+        table += '<tr>';
+
+        for (let j = 0; j < 10; j++) {
+            table += `<td class="cell"></td>`;
+        }
+        table += '</tr>';
+    }
+    table += '</table>';
+    const tableContainer = document.getElementById('board-table');
+    tableContainer.innerHTML = table;
+}
+</script>
+<script>
+    let rowIndex;
+    let columnIndex;
+    let moves;
+    let ships;
+    let movesText = document.getElementById('moves');
+    let shipsText = document.getElementById('ships');
+    let remainShips = 24;
+    let clickedTd;
+
+    $(document).ready(function () {
+
+        $('#board-table').on('click', 'td', function () {
+
+            clickedTd = $(this);
+
+            if ($(this).prop('disabled')) {
+                return;
+            }
+
+            rowIndex = $(this).parent().index(); // Get the row index
+            columnIndex = $(this).index(); // Get the column index
+
+            sendMove(rowIndex, columnIndex);
+
+            $(this).prop('disabled', true);
+            $(this).addClass('disabled-cell');
+        });
+    });
+
+    function sendMove(clickedRow, clickedColumn) {
+        $.ajax({
+            url: "/battleShips/getMoveCords",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                row: clickedRow,
+                column: clickedColumn
+            }),
+            dataType: "json",
+            complete: function () {
+                getMoves();
+            }
+        });
+    }
+
+    function getMoves() {
+        $.ajax({
+            url: "/battleShips/returnMoves",
+            type: "POST",
+            success: function (data) {
+                moves = data;
+                movesText.innerHTML = "Atlikote ėjimų: " + data + " iš 25";
+                getShips();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function getShips() {
+        $.ajax({
+            url: "/battleShips/sendShips",
+            type: "POST",
+            success: function (data) {
+                ships = data;
+                shipsText.innerHTML = "Laivų liko: " + data + " iš 24" ;
+                checkGameResult(moves, ships);
+
+                if (ships < remainShips) {
+                    remainShips--;
+                    clickedTd.addClass('hit');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+    function checkGameResult(moves, ships) {
+        if (moves > 25 && ships > 0) {
+            window.open('http://localhost:8080/battleShips/lost', "_self")
+        } else if (moves <= 25 && ships <= 0) {
+            window.open('http://localhost:8080/battleShips/won', "_self")
+        }
+    }
+
+    function openHome() {
+        window.open('http://localhost:8080/battleShips/home', '_self');
+    }
+</script>
+</body>
+</html>
