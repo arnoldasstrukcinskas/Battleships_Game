@@ -13,45 +13,56 @@ public class BattleShipsController {
 
 @Autowired
 BattleShipsService battleShipsService;
+@Autowired
 GameBoard gameBoard;
 
     //    http://localhost:8080/battleShips/home
 @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(){
     gameBoard = new GameBoard();
-    gameBoard.setField(battleShipsService.paintShips(gameBoard.getField()));
+    battleShipsService.resetCount();
     return "home";
 }
+
+    //    http://localhost:8080/battleShips/playGame
+@RequestMapping(value = "/playGame", method = RequestMethod.GET)
+    public String playGame(){
+    gameBoard.setField(battleShipsService.paintShips(gameBoard.getField()));
+    return "playGame";
+    }
+
 
 
     @RequestMapping(value = "/getMoveCords", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public String getMoveCoordinates(@RequestBody ObjectNode cordsResponse) {
+    public void getMoveCoordinates(@RequestBody ObjectNode cordsResponse) {
 
     char[][] generatedBoard = gameBoard.getField();
-        System.out.println(cordsResponse);
-
-        int outcome = battleShipsService.makeAMove(generatedBoard, cordsResponse);
-
-        if(outcome == 1){
-            System.out.println("--------won------------");
-            return "win";
-        } else if(outcome == -1) {
-            System.out.println("---------lost-----------");
-            return "lost";
-        } else {
-            return "";
-        }
-        //cia ikelti modifikatiota metoda, ir is cia imesti i html
+    battleShipsService.makeAMove(generatedBoard, cordsResponse);
     }
 
-    @RequestMapping(value = "/win", method = RequestMethod.GET)
-    public String won(){
-    return "win";
+    @RequestMapping(value = "/returnMoves", method = RequestMethod.POST)
+    @ResponseBody
+    public int returnMoves(){
+    int moves = battleShipsService.returnMoves();
+
+    return moves;
+    }
+
+    @RequestMapping(value = "/sendShips", method = RequestMethod.POST)
+    @ResponseBody
+    public int returnShips(){
+    int ships = battleShipsService.returnShips();
+    return ships;
+    }
+
+    @RequestMapping(value = "/won", method = RequestMethod.GET)
+    public String win(){
+        return "win";
     }
 
     @RequestMapping(value = "/lost", method = RequestMethod.GET)
-    public String lost(){
+    public String loose(){
         return "lost";
     }
 
