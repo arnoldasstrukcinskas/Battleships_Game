@@ -4,71 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+    <title>Battle Ships</title>
+    <link rel="stylesheet" th:href="@{/styles/home-styles.css}">
 </head>
 <body>
-<p>BattleShips game</p>
-<div id="board">
-    <table id="board-table"></table>
+
+<div id="button-container">
+<h1>BattleShips</h1>
+<button id="button" onclick="openGame()">Let's PLAY!!!!</button>
 </div>
-
-<script>
-
-    $(document).ready(function() {
-    generateTable();
-    });
-
-    function generateTable() {
-    let table = '<table>';
-
-    for (let i = 0; i < 10; i++) {
-        table += '<tr>';
-
-        for (let j = 0; j < 10; j++) {
-            table += `<td></td>`;
-        }
-        table += '</tr>';
-    }
-    table += '</table>';
-    const tableContainer = document.getElementById('board-table');
-    tableContainer.innerHTML = table;
-    }
-</script>
-<script>
-    let rowIndex;
-    let columnIndex;
-
-$(document).ready(function() {
-
-    $('#board-table').on('click', 'td', function() {
-
-        //ideti ifa, jeigu klickina ta pati, kad ismestu alerta.
-
-        rowIndex = $(this).parent().index(); // Get the row index
-        columnIndex = $(this).index(); // Get the column index
-
-        sendMove(rowIndex, columnIndex);
-
-    });
-<!--        alert(`(${rowIndex}, ${columnIndex})`);-->
-
-});
-
-    function sendMove(clickedRow, clickedColumn)
-    {
-    $.ajax({
-        url: "/battleShips/getMoveCords",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            row: clickedRow,
-            column: clickedColumn
-        }),
-        dataType: "json",
-    });
-    }
-</script>
 </body>
+<script>
+    function openGame(){
+    window.open('http://localhost:8080/battleShips/playGame', '_self');
+    }
+</script>
 </html>
