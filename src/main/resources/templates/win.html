@@ -3,9 +3,17 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Winner!!!!</title>
+    <link rel="stylesheet" th:href="@{/styles/win-screen.css}">
 </head>
 <body>
-<p>you have won</p>
+<h1>You have won!!!</h1>
+<button id="button" onclick="openHome()">Restart Game</button>
+<script>
+    function openHome(){
+    window.open('http://localhost:8080/battleShips/home', '_self');
+    }
+</script>
 </body>
 </html>
