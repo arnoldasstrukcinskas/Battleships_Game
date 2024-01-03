@@ -11,11 +11,11 @@ import java.util.Random;
 @Service
 public class BattleShipsService {
 
+    @Autowired
+    GameBoard gameBoard;
     Random random = new Random();
     boolean spaceFree = false;
     int count = 0;
-    @Autowired
-    GameBoard gameBoard;
 
     public char[][] paintShips(char[][] field) {
 
@@ -313,19 +313,18 @@ public class BattleShipsService {
                 }
             }
         }
-        // Printing the modified field directly from the service
-        for (int p = 0; p < field.length; p++) {
-            for (int l = 0; l < field[p].length; l++) {
-                System.out.print(field[p][l] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("----------------");
         return field;
+//      Šią dalį užkomentuoju, kad prireikus būtų galima matyti sugeneruotą žaidimo lenta.
+//        for (int p = 0; p < field.length; p++) {
+//            for (int l = 0; l < field[p].length; l++) {
+//                System.out.print(field[p][l] + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println("----------------");
     }
 
-    public int makeAMove(char[][] field, JsonNode jsonResponse) {
-
+    public void makeAMove(char[][] field, JsonNode jsonResponse) {
         int row = extractRow(jsonResponse);
         int column = extractColumn(jsonResponse);
         int shipsRemaining = gameProgress(field);
@@ -335,40 +334,18 @@ public class BattleShipsService {
             field[row][column] = '1';
             gameBoard.setField(field);
             count++;
+            shipsRemaining--;
+            gameBoard.setShipsRemaining(shipsRemaining);
         } else if (field != null && field[row][column] == '.') {
             field[row][column] = 'x';
             gameBoard.setField(field);
             count++;
         }
-
-        if(count <= 25 && shipsRemaining == 0){
-            return 1;
-        } else if(count > 25){
-            return -1;
-        } else {
-            return 0;
-        }
-//        System.out.println("comparing");
-//        System.out.println(row);
-//        System.out.println(column);
-//        // Printing the modified field directly from the service
-//        for (int p = 0; p < field.length; p++) {
-//            for (int l = 0; l < field[p].length; l++) {
-//                System.out.print(field[p][l] + " ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println("----------------");
-
+        gameBoard.setMoves(count);
     }
-
-    public void programMoves(){}
 
     public int gameProgress(char[][] field){
         int shipsRemaining = 0;
-
-        int row = 0;
-        int column = 0;
 
             for (int i = 0; i < field.length; i++) {
                 for (int j = 0; j < field.length; j++) {
@@ -377,25 +354,30 @@ public class BattleShipsService {
                     }
                 }
             }
-
+            gameBoard.setShipsRemaining(shipsRemaining);
         return shipsRemaining;
     }
 
+    public int returnMoves(){
+        return gameBoard.getMoves();
+    }
+    public int returnShips(){
+        return gameBoard.getShipsRemaining();
+    }
     public int extractRow(JsonNode jsonResponse){
     JsonNode rowConvert = jsonResponse.at("/row");
 
     int row = rowConvert.asInt();
-
-        System.out.println("row" + row);
         return row;
     }
     public int extractColumn(JsonNode jsonResponse){
         JsonNode columnConvert = jsonResponse.at("/column");
         int column = columnConvert.asInt();
-        System.out.println("column" + column);
-
         return column;
     }
 
+    public void resetCount() {
+        count = 0;
+    }
 
 }
