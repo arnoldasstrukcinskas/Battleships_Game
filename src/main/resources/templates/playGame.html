@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GameBoard</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" th:href="@{/styles/playGame-styles.css}">
+    <link rel="stylesheet" th:href="@{/styles/CSS/playGame-styles.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/styles/assets/icon.png}" />
 </head>
 <body>
 <h1>Game Board</h1>
@@ -123,14 +124,14 @@ function generateTable() {
     }
     function checkGameResult(moves, ships) {
         if (moves > 25 && ships > 0) {
-            window.open('https://battleships-b2bj.onrender.com/battleShips/lost', "_self")
+            window.open('https://battleships-aybufebyd9cncwen.polandcentral-01.azurewebsites.net/battleShips/lost', "_self")
         } else if (moves <= 25 && ships <= 0) {
-            window.open('https://battleships-b2bj.onrender.com/battleShips/won', "_self")
+            window.open('https://battleships-aybufebyd9cncwen.polandcentral-01.azurewebsites.net/won', "_self")
         }
     }
 
     function openHome() {
-        window.open('https://battleships-b2bj.onrender.com/battleShips/home', '_self');
+        window.open('https://battleships-aybufebyd9cncwen.polandcentral-01.azurewebsites.net/battleShips/home', '_self');
     }
 </script>
 </body>
