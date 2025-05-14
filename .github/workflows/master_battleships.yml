@@ -53,4 +53,4 @@ jobs:
           app-name: 'Battleships'
           slot-name: 'Production'
           package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E4BE10496874FCF8185DDA6E9F2DA89 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A285A8A6B76D4B9EAD20FCC994A1AC1B }}
