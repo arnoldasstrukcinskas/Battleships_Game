@@ -123,14 +123,14 @@ function generateTable() {
     }
     function checkGameResult(moves, ships) {
         if (moves > 25 && ships > 0) {
-            window.open('http://localhost:8080/battleShips/lost', "_self")
+            window.open('https://battleships-b2bj.onrender.com/battleShips/lost', "_self")
         } else if (moves <= 25 && ships <= 0) {
-            window.open('http://localhost:8080/battleShips/won', "_self")
+            window.open('https://battleships-b2bj.onrender.com/battleShips/won', "_self")
         }
     }
 
     function openHome() {
-        window.open('http://localhost:8080/battleShips/home', '_self');
+        window.open('https://battleships-b2bj.onrender.com/battleShips/home', '_self');
     }
 </script>
 </body>
